@@ -7,6 +7,14 @@
   "dependencies": {
     "peoplestring-parse": "^2.0.3"
   },
+  "files": [
+    "AUTHORS",
+    "LICENSE",
+    "README.md",
+    "check-authors-certificate",
+    "index.js",
+    "package.json"
+  ],
   "license": "MIT",
   "repository": "jslicense/check-authors-certificate.js",
   "scripts": {
