@@ -5,5 +5,8 @@
   "author": "Kyle E. Mitchell <kyle@kemitchell.com> (https://kemitchell.com/)",
   "bin": "check-authors-certificate",
   "repository": "jslicense/check-authors-certificate.js",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "peoplestring-parse": "^2.0.3"
+  }
 }

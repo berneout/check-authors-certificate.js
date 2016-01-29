@@ -1,19 +1,29 @@
 module.exports = checkAUTHORSCertificate
 
 var child = require('child_process')
+var fs = require('fs')
+var parse = require('peoplestring-parse')
+var path = require('path')
 
 function checkAUTHORSCertificate(directory, callback) {
   listGitAuthors(directory, function(error, gitAuthors) {
     if (error) {
       callback(error) }
     else {
-      callback(null, gitAuthors) } }) }
+      listAUTHORS(directory, function(error, authors) {
+        if (error) {
+          callback(error) }
+        else {
+          var missing = gitAuthors
+            .filter(function(gitAuthor) {
+              return ( authors.indexOf(gitAuthor) < 0 ) })
+          callback(null, missing) } }) } }) }
 
 function listGitAuthors(gitDirectory, callback) {
-  var error = false
+  var childError = false
 
   var git = child.spawn(
-    'git', [ 'log',  '--format="%aN"' ],
+    'git', [ 'log',  '--format=%aN' ],
     { cwd: gitDirectory })
 
   var outputBuffers = [ ]
@@ -27,27 +37,58 @@ function listGitAuthors(gitDirectory, callback) {
       errorBuffers.push(buffer) })
 
   git
-    .on('error', function(gitError) {
-      error = gitError
-      callback(error) })
+    .on('error', function(error) {
+      childError = error })
     .on('close', function(exitCode) {
       if (exitCode !== 0) {
         callback(
           new Error(
-            'Failed with exit code ' + exitCode + '\n' +
+            'Failed with exit code ' + exitCode + ':\n' +
             Buffer.concat(errorBuffers).toString() )) }
-      else if (error) {
-        callback(error) }
+      else if (childError) {
+        callback(childError) }
       else {
-        var output = Buffer.concat(outputBuffers).toString()
-        var gitAuthors = output
+        var gitAuthors = Buffer.concat(outputBuffers)
+          .toString()
           .split('\n')
           .reduce(
             function(unique, element) {
+              var empty = ( element.trim().length === 0 )
+              var seen = ( unique.indexOf(element) > -1 )
               return (
-                ( ( unique.indexOf(element) < 0 ) &&
-                  ( element.length > 0 ) ) ?
+                ( !seen && !empty ) ?
                     unique.concat(element) :
                     unique ) },
             [ ])
         callback(null, gitAuthors) } }) }
+
+var commentRE = /^\s*#/
+
+function listAUTHORS(directory, callback) {
+  var authorsFile = path.join(directory, 'AUTHORS')
+  fs.access(authorsFile, fs.R_OK, function(error) {
+    if (error) {
+      callback(new Error('Cannot read ' + authorsFile + '.')) }
+    else {
+      fs.readFile(authorsFile, function(error, buffer) {
+        if (error) {
+          callback(error) }
+        else {
+          var authors = buffer
+           .toString()
+           .split('\n')
+           .filter(function(line) {
+             return !commentRE.test(line) })
+           .reduce(
+             function(authors, line) {
+               var parsed = parse(line)
+               if (!parsed) {
+                 return authors }
+              else {
+                if ( ( 'name' in parsed ) &&
+                     ( authors.indexOf(parsed.name) < 0 ))
+                { return authors.concat(parsed.name) }
+                else {
+                  return authors } } },
+             [ ])
+          callback(null, authors) } }) } }) }
