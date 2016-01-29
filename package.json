@@ -8,5 +8,9 @@
     "peoplestring-parse": "^2.0.3"
   },
   "license": "MIT",
-  "repository": "jslicense/check-authors-certificate.js"
+  "repository": "jslicense/check-authors-certificate.js",
+  "scripts": {
+    "check-authors": "./check-authors-certificate",
+    "test": "npm run check-authors"
+  }
 }
