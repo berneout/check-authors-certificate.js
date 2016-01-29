@@ -1,0 +1,9 @@
+{
+  "name": "check-authors-certificate",
+  "version": "0.0.0",
+  "description": "find Git commit authors who are not listed in AUTHORS",
+  "author": "Kyle E. Mitchell <kyle@kemitchell.com> (https://kemitchell.com/)",
+  "bin": "check-authors-certificate",
+  "repository": "jslicense/check-authors-certificate.js",
+  "license": "MIT"
+}
