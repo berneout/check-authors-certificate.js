@@ -8,4 +8,5 @@ require('./')(process.cwd(), function(error, missing) {
       process.stderr.write( 'Missing AUTHORS line for "' + name + '"\n') })
     process.exit(1) }
   else {
+    process.stdout.write('All Git commit authors are listed in AUTHORS\n')
     process.exit(0) } })
