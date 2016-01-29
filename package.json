@@ -1,12 +1,12 @@
 {
   "name": "check-authors-certificate",
-  "version": "1.0.1",
   "description": "find Git commit authors who are not listed in AUTHORS",
+  "version": "1.0.1",
   "author": "Kyle E. Mitchell <kyle@kemitchell.com> (https://kemitchell.com/)",
   "bin": "check-authors-certificate",
-  "repository": "jslicense/check-authors-certificate.js",
-  "license": "MIT",
   "dependencies": {
     "peoplestring-parse": "^2.0.3"
-  }
+  },
+  "license": "MIT",
+  "repository": "jslicense/check-authors-certificate.js"
 }
