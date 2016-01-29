@@ -1,7 +1,7 @@
 {
   "name": "check-authors-certificate",
   "description": "find Git commit authors who are not listed in AUTHORS",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "author": "Kyle E. Mitchell <kyle@kemitchell.com> (https://kemitchell.com/)",
   "bin": "check-authors-certificate",
   "dependencies": {
